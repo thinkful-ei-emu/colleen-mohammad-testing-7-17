@@ -43,3 +43,38 @@ describe('GET /generate endpoint', () => {
   });
 });
 
+describe('Frequency', ()=>{
+  it('should expect to output an object', ()=>{
+    return request(app)
+    .get('/frequency')//getting endpoint
+    .query({s: 'aBBdddeeee'}) //sending query a string with this value
+    .expect(200) //asserting that getting OK response
+    .expect('Content-Type', /json/)
+    .then(res => {
+      expect(res.body).to.be.an('object') //expect return to be a string
+    })
+  });
+  it('expects to give correct object given a string', ()=>{
+    const expected = {
+      unique: 4,
+      average: 2.5,
+      highest: 'e',
+      'a': 1,
+      'b': 2,
+      'd': 3,
+      'e': 4 
+    };
+    return request(app)
+    .get('/frequency')
+    .query({s: 'aBBdddeeee'})
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .then(res => {
+      expect(res.body).to.eql(expected)
+      expect(res.body).to.include.all.keys('unique', 'average', 'highest')
+    
+    })
+
+  })
+})
+
